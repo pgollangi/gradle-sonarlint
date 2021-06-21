@@ -1,0 +1,8 @@
+pluginManagement {
+    includeBuild '../sonarlint-plugin'
+}
+
+//include '../sonarlint-plugin'
+
+rootProject.name = 'sonarlint-plugin-consumer'
+
