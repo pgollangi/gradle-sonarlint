@@ -7,7 +7,7 @@ import org.gradle.api.tasks.Optional;
 import org.gradle.api.tasks.TaskAction;
 import org.gradle.api.tasks.VerificationTask;
 
-import name.pgollangi.gradle.sonarlint.api.LinterMode;
+import name.pgollangi.gradle.sonarlinter.LinterMode;
 
 abstract public class SonarLintTask extends DefaultTask implements VerificationTask {
 
@@ -17,15 +17,15 @@ abstract public class SonarLintTask extends DefaultTask implements VerificationT
 
 	@Input
 	@Optional
-	abstract public Property<LinterMode> getServerUrl();
+	abstract public Property<String> getServerUrl();
 
 	@Input
 	@Optional
-	abstract public Property<LinterMode> getToken();
+	abstract public Property<String> getToken();
 
 	@Input
 	@Optional
-	abstract public Property<LinterMode> getProjectKey();
+	abstract public Property<String> getProjectKey();
 
 	@Override
 	public String getDescription() {

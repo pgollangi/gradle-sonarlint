@@ -1,4 +1,4 @@
-package name.pgollangi.gradle.sonarlint.api;
+package name.pgollangi.gradle.sonarlinter;
 
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;

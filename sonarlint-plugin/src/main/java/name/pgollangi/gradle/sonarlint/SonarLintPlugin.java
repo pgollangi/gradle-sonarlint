@@ -18,7 +18,8 @@ public class SonarLintPlugin implements Plugin<Project> {
 		SonarLintPluginExtension extension = proj.getExtensions().create("sonarlint", SonarLintPluginExtension.class);
 
 		proj.getTasks().create("sonarlint", SonarLintTask.class, task -> {
-			task.getMode().set(extension.getMode());
+			System.out.println("MODE " + extension.getMode().orElse("AA").get());
+//			task.getMode().set(extension.getMode());
 			task.getServerUrl().set(extension.getServerUrl());
 		});
 	}
