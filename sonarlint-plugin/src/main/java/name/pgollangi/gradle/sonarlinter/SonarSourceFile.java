@@ -1,4 +1,4 @@
-package name.pgollangi.gradle.sonarlint.api;
+package name.pgollangi.gradle.sonarlinter;
 
 import java.io.File;
 import java.io.FileInputStream;

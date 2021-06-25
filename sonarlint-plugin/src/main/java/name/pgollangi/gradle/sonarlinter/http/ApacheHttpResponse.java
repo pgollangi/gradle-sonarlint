@@ -1,4 +1,4 @@
-package name.pgollangi.gradle.sonarlint.http;
+package name.pgollangi.gradle.sonarlinter.http;
 
 import java.io.IOException;
 import java.io.InputStream;

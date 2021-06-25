@@ -1,4 +1,4 @@
-package name.pgollangi.gradle.sonarlint.api;
+package name.pgollangi.gradle.sonarlinter;
 
 import java.io.File;
 import java.net.MalformedURLException;
@@ -14,11 +14,12 @@ import org.sonarsource.sonarlint.core.client.api.common.analysis.Issue;
 import org.sonarsource.sonarlint.core.client.api.common.analysis.IssueListener;
 import org.sonarsource.sonarlint.core.client.api.connected.ConnectedAnalysisConfiguration;
 import org.sonarsource.sonarlint.core.client.api.connected.ConnectedGlobalConfiguration;
+import org.sonarsource.sonarlint.core.client.api.connected.ConnectedSonarLintEngine.State;
 import org.sonarsource.sonarlint.core.client.api.standalone.StandaloneGlobalConfiguration;
 import org.sonarsource.sonarlint.core.container.analysis.ServerConfigurationProvider.ServerConfiguration;
 import org.sonarsource.sonarlint.core.serverapi.EndpointParams;
 
-import name.pgollangi.gradle.sonarlint.http.ApacheHttpClient;
+import name.pgollangi.gradle.sonarlinter.http.ApacheHttpClient;
 
 public class SonarLinter {
 
@@ -56,7 +57,7 @@ public class SonarLinter {
 //		StandaloneSonarLintEngine engine = new StandaloneSonarLintEngineImpl(engineConfig);
 
 		ConnectedGlobalConfiguration connectedGlobalConfiguration = ConnectedGlobalConfiguration.builder()
-				.addEnabledLanguage(Language.JS).setConnectionId("https://sonarqube.otxlab.net")
+				.addEnabledLanguages(Language.JS, Language.JAVA).setConnectionId("https://sonarqube.otxlab.net")
 				.setStorageRoot(Paths.get("C:\\dev\\poc\\gradle-sonarlint\\sstorage"))
 				.setNodeJs(Paths.get("C:\\Program Files\\nodejs\\node.exe"), Version.create("14.17.0")).build();
 
@@ -69,16 +70,18 @@ public class SonarLinter {
 		EndpointParams endpointParams = new EndpointParams("https://sonarqube.otxlab.net", false, null);
 		ApacheHttpClient httpClient = ApacheHttpClient.create().withToken("a751bb74069e32f892cbc21384683f7fedd70c52");
 		ConnectedSonarLintEngineImpl engine = new ConnectedSonarLintEngineImpl(connectedGlobalConfiguration);
-		System.out.println("ENGINE STATE " + engine.getState());
-		engine.update(endpointParams, httpClient, progressMonitor);
-		System.out.println("ENGINE STATE " + engine.getState());
-		engine.updateProject(endpointParams, httpClient, "OT2_CORECM_Dev:refs_heads_Dev", false, progressMonitor);
+		if (engine.getState() == State.NEVER_UPDATED) {
+			System.out.println("ENGINE STATE " + engine.getState());
+			engine.update(endpointParams, httpClient, progressMonitor);
+			System.out.println("ENGINE STATE " + engine.getState());
+			engine.updateProject(endpointParams, httpClient, "OT2_CORECM_Dev:refs_heads_Dev", false, progressMonitor);
+		}
 		engine.start();
 
 		SonarSourceFile file = new SonarSourceFile(
-				new File("C:\\dev\\ot2\\corecm\\ui\\src\\model.transformer\\model.transformers.js"),
-				"C:\\dev\\ot2\\corecm\\ui\\src\\model.transformer\\model.transformers.js", false,
-				Charset.defaultCharset(), "js");
+				new File("C:\\dev\\ot2\\corecm\\src\\main\\java\\com\\opentext\\core\\cm\\api\\hateoas\\model\\PageModel.java"),
+				"C:\\dev\\ot2\\corecm\\src\\main\\java\\com\\opentext\\core\\cm\\api\\hateoas\\model\\PageModel.java", false,
+				Charset.defaultCharset(), "java");
 
 //		StandaloneAnalysisConfiguration analysisConfig = StandaloneAnalysisConfiguration.builder()
 //				.setBaseDir(projectDir.toPath()).putExtraProperty("moduleKey", "file:///c:/dev/ot2/corecm/ui")
@@ -92,7 +95,11 @@ public class SonarLinter {
 
 			@Override
 			public void handle(Issue issue) {
-				System.out.println(issue);
+				if (issue.getType() == "BUG") {
+					System.out.println(issue.getType());
+					System.out.println(issue);
+					System.out.println(issue.getMessage());
+				}
 			}
 		};
 

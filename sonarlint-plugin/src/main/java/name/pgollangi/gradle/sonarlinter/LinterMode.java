@@ -1,4 +1,4 @@
-package name.pgollangi.gradle.sonarlint.api;
+package name.pgollangi.gradle.sonarlinter;
 
 public enum LinterMode {
 	CONNECTED, STANDALONE

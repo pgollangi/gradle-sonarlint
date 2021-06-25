@@ -33,4 +33,9 @@ dependencies {
 application {
     // Define the main class for the application.
     mainClassName = 'name.pgollangi.gradle.sonarlint.plugin.consumer.App'
+    
+}
+
+sonarlint {
+	mode = 'CONNECTED'
 }
