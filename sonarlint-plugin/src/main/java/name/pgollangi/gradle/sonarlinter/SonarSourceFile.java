@@ -7,29 +7,29 @@ import java.io.InputStream;
 import java.net.URI;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
+import java.nio.file.Path;
 
-import org.apache.commons.io.IOUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.sonarsource.sonarlint.core.client.api.common.analysis.ClientInputFile;
 
 public final class SonarSourceFile implements Comparable<SonarSourceFile>, ClientInputFile {
 	@NotNull
-	private final String absolutePath;
+	private String absolutePath;
 
 	@NotNull
-	private final File file;
+	private File file;
 
 	@NotNull
-	private final String relativePath;
+	private String relativePath;
 
-	private final boolean isTest;
+	private boolean isTest;
 
 	@NotNull
-	private final Charset charset;
+	private Charset charset;
 
 	@Nullable
-	private final String language;
+	private String language;
 
 	public SonarSourceFile(@NotNull File file, @NotNull String relativePath, boolean isTest, @NotNull Charset charset,
 			@Nullable String language) {
@@ -39,6 +39,10 @@ public final class SonarSourceFile implements Comparable<SonarSourceFile>, Clien
 		this.charset = charset;
 		this.language = language;
 		this.absolutePath = this.file.getAbsolutePath();
+	}
+
+	public SonarSourceFile(Path filePath, String string, boolean testType) {
+
 	}
 
 	@NotNull

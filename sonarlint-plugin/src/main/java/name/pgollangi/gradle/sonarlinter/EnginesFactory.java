@@ -34,9 +34,10 @@ public class EnginesFactory {
 	private final LogOutput logOutput;
 	private LinterConfiguration configuration;
 
-	public EnginesFactory(LinterConfiguration configuration, LogOutput logOutput) {
+	public EnginesFactory(LinterConfiguration configuration, LogOutput logOutput, ModulesProvider modulesProvider) {
 		this.configuration = configuration;
 		this.logOutput = logOutput;
+		this.modulesProvider = modulesProvider;
 		this.init();
 	}
 
