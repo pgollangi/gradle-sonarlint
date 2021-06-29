@@ -40,7 +40,7 @@ gradlePlugin {
     // Define the plugin
     plugins {
         sonarlintPlugin {
-            id = 'name.pgollangi.gradle-sonarlint'
+            id = 'com.github.pgollangi.sonarlint'
             implementationClass = 'name.pgollangi.gradle.sonarlint.SonarLintPlugin'
         }
     }
