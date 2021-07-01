@@ -1,6 +1,5 @@
 package name.pgollangi.gradle.sonarlinter;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -14,14 +13,9 @@ import org.jetbrains.annotations.Nullable;
 import org.sonarsource.sonarlint.core.client.api.common.analysis.ClientInputFile;
 
 public final class SonarSourceFile implements Comparable<SonarSourceFile>, ClientInputFile {
-	@NotNull
-	private String absolutePath;
 
 	@NotNull
-	private File file;
-
-	@NotNull
-	private String relativePath;
+	private Path file;
 
 	private boolean isTest;
 
@@ -31,28 +25,12 @@ public final class SonarSourceFile implements Comparable<SonarSourceFile>, Clien
 	@Nullable
 	private String language;
 
-	public SonarSourceFile(@NotNull File file, @NotNull String relativePath, boolean isTest, @NotNull Charset charset,
-			@Nullable String language) {
+	private Path relativePath;
+
+	public SonarSourceFile(@NotNull Path file, Path relativePath, boolean isTest) {
 		this.file = file;
 		this.relativePath = relativePath;
 		this.isTest = isTest;
-		this.charset = charset;
-		this.language = language;
-		this.absolutePath = this.file.getAbsolutePath();
-	}
-
-	public SonarSourceFile(Path filePath, String string, boolean testType) {
-
-	}
-
-	@NotNull
-	public final File getFile() {
-		return this.file;
-	}
-
-	@NotNull
-	public final String getRelativePath() {
-		return this.relativePath;
 	}
 
 	public final boolean isTest() {
@@ -69,58 +47,22 @@ public final class SonarSourceFile implements Comparable<SonarSourceFile>, Clien
 		return this.language;
 	}
 
-	@NotNull
-	public final String getAbsolutePath() {
-		return this.absolutePath;
-	}
-
 	public int compareTo(@NotNull SonarSourceFile other) {
-		return this.absolutePath.compareTo(other.absolutePath);
-	}
-
-	@NotNull
-	public final File component1() {
-		return this.file;
-	}
-
-	@NotNull
-	public final String component2() {
-		return this.relativePath;
-	}
-
-	public final boolean component3() {
-		return this.isTest;
-	}
-
-	@NotNull
-	public final Charset component4() {
-		return this.charset;
-	}
-
-	@Nullable
-	public final String component5() {
-		return this.language;
-	}
-
-	@NotNull
-	public final SonarSourceFile copy(@NotNull File file, @NotNull String relativePath, boolean isTest,
-			@NotNull Charset charset, @Nullable String language) {
-		return new SonarSourceFile(file, relativePath, isTest, charset, language);
+		return this.file.compareTo(other.file);
 	}
 
 	@NotNull
 	public String toString() {
-		return "SonarSourceFile(file=" + this.file + ", relativePath=" + this.relativePath + ", isTest=" + this.isTest
-				+ ", charset=" + this.charset + ", language=" + this.language + ")";
+		return "SonarSourceFile(file=" + this.file + ", isTest=" + this.isTest + ", charset=" + this.charset
+				+ ", language=" + this.language + ")";
 	}
 
 	public int hashCode() {
 		if (this.isTest)
 			;
-		return (((((this.file != null) ? this.file.hashCode() : 0) * 31
-				+ ((this.relativePath != null) ? this.relativePath.hashCode() : 0)) * 31 + 1) * 31
+		return ((((this.file != null) ? this.file.hashCode() : 0) * 31
 				+ ((this.charset != null) ? this.charset.hashCode() : 0)) * 31
-				+ ((this.language != null) ? this.language.hashCode() : 0);
+				+ ((this.language != null) ? this.language.hashCode() : 0));
 	}
 
 	public boolean equals(@Nullable Object paramObject) {
@@ -135,32 +77,31 @@ public final class SonarSourceFile implements Comparable<SonarSourceFile>, Clien
 
 	@Override
 	public String getPath() {
-		return this.file.getAbsolutePath();
+		return this.file.toAbsolutePath().toString();
 	}
 
 	@Override
 	public <G> G getClientObject() {
-		// TODO Auto-generated method stub
-		return null;
+		return (G) this;
 	}
 
 	@Override
 	public InputStream inputStream() throws IOException {
-		return new FileInputStream(this.file);
+		return new FileInputStream(this.file.toFile());
 	}
 
 	@Override
 	public String contents() throws IOException {
-		return Files.readString(this.file.toPath());
+		return Files.readString(this.file);
 	}
 
 	@Override
 	public String relativePath() {
-		return this.file.getAbsolutePath();
+		return this.relativePath.toString();
 	}
 
 	@Override
 	public URI uri() {
-		return file.toURI();
+		return file.toUri();
 	}
 }

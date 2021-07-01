@@ -47,7 +47,7 @@ gradlePlugin {
 }
 
 pluginBundle {
-  website = 'https://pgollangi.github.io/gradle-sonarlint'
+  website = 'https://github.com/pgollangi/gradle-sonarlint'
   vcsUrl = 'https://github.com/pgollangi/gradle-sonarlint'
   description = 'Execute SonarLint analysis locally with Standalone or SonarQube profiles'
   tags = ['sonarlint', 'sonarqube', 'sonarcloud', 'sonarsource']

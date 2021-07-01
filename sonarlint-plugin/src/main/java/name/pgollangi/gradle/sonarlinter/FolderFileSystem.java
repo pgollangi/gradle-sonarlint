@@ -52,12 +52,11 @@ public class FolderFileSystem implements ClientFileSystem {
 	}
 
 	private ClientInputFile toClientInputFile(Path filePath, InputFile.Type type) {
-		return new SonarSourceFile(filePath, folder.relativize(filePath).toString(), isTestType(type));
+		return new SonarSourceFile(filePath, folder.relativize(filePath), isTestType(type));
 	}
 
-	private boolean isTestType(Type type) {
-		// TODO Auto-generated method stub
-		return false;
+	private static boolean isTestType(InputFile.Type type) {
+		return type == InputFile.Type.TEST;
 	}
 
 }
